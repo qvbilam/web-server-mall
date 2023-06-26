@@ -1,0 +1,15 @@
+name: "mall"
+host: "127.0.0.1"
+port: 9706
+mall-server:
+  host: "127.0.0.1"
+  port: 9806
+  name: "grpc-mall-server"
+user-server:
+  host: "127.0.0.1"
+  port: 9801
+  name: "grpc-user-server"
+message-server:
+  host: "127.0.0.1"
+  port: 9804
+  name: "grpc-message-server"

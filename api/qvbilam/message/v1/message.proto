@@ -1,0 +1,110 @@
+syntax = "proto3";
+package messagePb.v1;
+import "google/protobuf/empty.proto";
+import "api/qvbilam/page/v1/page.proto";
+option go_package="mall/api/qvbilam/message/v1;messageV1";
+
+message MessageResponse {
+  int64 userId = 1; // 发送用户
+  string UID = 2;
+  string type = 3;
+  string introduce = 4; // 对象里的content
+  string content = 5; // message.content
+  int64 createdTime = 6;
+}
+
+message MessagesResponse {
+  int64 total = 1;
+  repeated MessageResponse messages = 2;
+}
+
+message MessageRequest {
+  int64 code = 1;
+  string type = 2;
+  string content = 3;
+  string url = 4;
+  string extra = 5;
+}
+
+message CreatePrivateRequest {
+  int64 UserId = 1;
+  int64 TargetUserId = 2;
+  MessageRequest Message = 3;
+}
+
+message CreateRoomRequest {
+  int64 UserId = 1;
+  int64 RoomId = 2;
+  MessageRequest Message = 3;
+}
+
+message CreateGroupRequest{
+  int64 UserId = 1;
+  int64 GroupId = 2;
+  MessageRequest Message = 3;
+}
+
+message CreateSystemRequest {
+  string object = 1;
+  int64 UserId = 2;
+  MessageRequest Message = 3;
+}
+
+message CreateTipRequest {
+  int64 UserId = 1;
+  MessageRequest Message = 2;
+}
+
+message UpdateQueueRequest {
+  string Name = 1;
+  string ExchangeName = 2;
+  int64 Status = 3;
+}
+
+message QueueResponse {
+  string Name = 1;
+  string ExchangeName = 2;
+}
+
+message GetGroupMessageRequest {
+  int64 userId = 1;
+  int64 groupId = 2;
+  string keyword = 3;
+  string type = 4;
+  pagePb.v1.PageRequest page = 5;
+}
+
+message GetPrivateMessageRequest {
+  int64 userId = 1;
+  int64 targetUserId = 2;
+  string keyword = 3;
+  string type = 4;
+  pagePb.v1.PageRequest page = 5;
+}
+
+message CreateBroadcastUserRequest {
+  int64 userId = 1;
+  repeated int64 userIds = 2;
+  MessageRequest Message = 3;
+}
+
+service Message {
+  rpc CreateQueue (UpdateQueueRequest) returns (QueueResponse);
+  rpc UpdateQueue (UpdateQueueRequest) returns (google.protobuf.Empty);
+  rpc DeleteQueue (UpdateQueueRequest) returns (google.protobuf.Empty);
+  rpc CreatePrivateMessage (CreatePrivateRequest) returns (google.protobuf.Empty);
+  rpc CreateRoomMessage(CreateRoomRequest) returns (google.protobuf.Empty);
+  rpc GetPrivateMessage(GetPrivateMessageRequest) returns (MessagesResponse);
+
+
+  rpc CreateBroadcastUserMessage(CreateBroadcastUserRequest) returns (google.protobuf.Empty);
+
+  rpc CreateGroupMessage(CreateGroupRequest) returns (google.protobuf.Empty);
+  rpc CreateGroupTxtMessage(CreateGroupRequest) returns (google.protobuf.Empty);
+  rpc CreateGroupCmdMessage(CreateGroupRequest) returns (google.protobuf.Empty);
+  rpc CreateGroupTipMessage(CreateGroupRequest) returns (google.protobuf.Empty);
+  rpc GetGroupMessage(GetGroupMessageRequest) returns (MessagesResponse);
+
+  rpc CreateSystemMessage(CreateSystemRequest) returns (google.protobuf.Empty);
+  rpc CreateTipMessage(CreateTipRequest) returns (google.protobuf.Empty);
+}
