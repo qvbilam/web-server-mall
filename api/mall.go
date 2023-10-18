@@ -68,3 +68,31 @@ func GoodsList(ctx *gin.Context) {
 func GoodsDetail(ctx *gin.Context) {
 	SuccessNotContent(ctx)
 }
+
+// GoodsSell 商品售卖
+func GoodsSell(ctx *gin.Context) {
+	paramId, _ := ctx.GetQuery("id")
+	id, _ := strconv.Atoi(paramId)
+
+	uID, _ := ctx.Get("userId")
+	userID := uID.(int64)
+
+	request := validate.GoodsSell{}
+	if err := ctx.ShouldBind(&request); err != nil {
+		HandleValidateError(ctx, err)
+		return
+	}
+
+	// 购买
+	res, err := global.MallServerClient.Sell(context.Background(), &proto.SellRequest{
+		Id:     int64(id),
+		Count:  request.Count,
+		UserId: userID,
+	})
+	if err != nil {
+		HandleGrpcErrorToHttp(ctx, err)
+		return
+	}
+
+	SuccessNotMessage(ctx, res)
+}

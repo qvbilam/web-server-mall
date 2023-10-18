@@ -12,5 +12,6 @@ func InitMallRouter(Router *gin.RouterGroup) {
 		MessageRouter.GET("category", api.Category)
 		MessageRouter.GET("goods", api.GoodsList)
 		MessageRouter.GET("goods/:id", api.GoodsDetail)
+		MessageRouter.POST("buy/goods/:id", api.GoodsSell) // 购买
 	}
 }
